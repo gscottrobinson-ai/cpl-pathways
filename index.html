@@ -227,13 +227,13 @@ const paths=[
          {t:"Takes the exam",d:"Pays the fee, no retakes.",who:"Student"},
          {t:"Credit posts",who:"Registrar",post:true}],
   note:"NSU's CPL plan includes AI-assisted credit by exam."},
- {tier:2,id:"E",name:"Certifications and non-credit training",sub:"POST, CompTIA and other industry credentials, workforce and continuing education programs",status:["s-plan","Planned"],fee:"No fee once pre-assessed",
-  steps:[{t:"Faculty evaluate a credential once",d:"Using a rubric like the Memphis certificate rubric, or a review of the program's syllabus, hours, and assessments.",who:"Faculty",p:["marcus","dana","luis"]},
-         {t:"Map it to NSU courses",d:"Example: POST academy training to Criminal Justice courses.",who:"Faculty · Chair",p:["marcus","dana","luis"]},
-         {t:"Add it to the approved list",d:"The crosswalk of pre-assessed credentials and non-credit programs.",who:"Registrar",q:[9],p:["marcus","dana","luis"]},
-         {t:"Student submits the credential",d:"Certificate, license, or completion record.",who:"Student",p:["marcus","dana","luis"]},
-         {t:"Registrar verifies it",d:"Confirms the credential is real and current. No faculty meeting needed.",who:"Registrar",q:[8],p:["marcus","dana","luis"]},
-         {t:"Credit posts",who:"Registrar",post:true,p:["marcus","dana","luis"]}],
+ {tier:2,id:"E",name:"Certifications and non-credit training",sub:"POST, CNA, CompTIA and other industry credentials, workforce and continuing education programs",status:["s-plan","Planned"],fee:"No fee once pre-assessed",
+  steps:[{t:"Faculty evaluate a credential once",d:"Using a rubric like the Memphis certificate rubric, or a review of the program's syllabus, hours, and assessments.",who:"Faculty",p:["marcus","dana","luis","priya"]},
+         {t:"Map it to NSU courses",d:"Example: POST academy training to Criminal Justice courses.",who:"Faculty · Chair",p:["marcus","dana","luis","priya"]},
+         {t:"Add it to the approved list",d:"The crosswalk of pre-assessed credentials and non-credit programs.",who:"Registrar",q:[9],p:["marcus","dana","luis","priya"]},
+         {t:"Student submits the credential",d:"Certificate, license, or completion record.",who:"Student",p:["marcus","dana","luis","priya"]},
+         {t:"Registrar verifies it",d:"Confirms the credential is real and current. No faculty meeting needed.",who:"Registrar",q:[8],p:["marcus","dana","luis","priya"]},
+         {t:"Credit posts",who:"Registrar",post:true,p:["marcus","dana","luis","priya"]}],
   note:"Faculty decide once, and the Registrar verifies after that. NSU is exploring POST credit and an online, CPL-friendly Criminal Justice pathway."},
  {tier:2,id:"F",name:"Credit by portfolio",sub:"Visual Media pilot first, then other programs",status:["s-none","Not built"],fee:"Fee and amount undecided",
   steps:[{t:"Discovery session",d:"Faculty explain which courses fit and whether the student is ready.",who:"Faculty",q:[3],p:["sam"]},
@@ -266,7 +266,7 @@ const PERSONAS={
  marcus:["Marcus","<b>Marcus</b>, 34, patrol officer, part-time Criminal Justice student on rotating shifts. Faculty already reviewed the POST academy, so he uploads his certificate and the Registrar verifies it. Nobody has pre-assessed his FTO and supervisor training, so he builds a portfolio on his own schedule and a CJ faculty member reviews it online. Outcome: 9 CJ credits for POST and 3 for the portfolio."],
  dana:["Dana","<b>Dana</b>, 41, twelve years in help desk and network support, Engineering Technology BAS. The AI CPL checker matches her Network+ and Security+ to courses faculty already approved, the Registrar confirms both are current, and she never meets with faculty. Her expired A+ waits on a policy decision. Outcome: 9 credits toward her major."],
  luis:["Luis","<b>Luis</b>, 28, medical office front desk, Allied Health BAS. He finished a non-credit Medical Billing and Coding certificate and assumed it didn't count. His advisor spots it on his intake form, faculty already approved that program for one course, and the credit posts. Outcome: 3 credits he'd written off."],
- priya:["Priya","<b>Priya</b>, 30, certified nursing assistant for six years, Nursing major. She wants credit for a fundamentals nursing course. The checker knows that course is on the ineligible list and tells her before she pays anything, then shows her what she can earn. Outcome: no nursing credit, 3 elective credits, and a student who still trusts the process."]
+ priya:["Priya","<b>Priya</b>, 30, certified nursing assistant for six years, Nursing major. She wants credit for a fundamentals nursing course. The checker knows that course is on the ineligible list and tells her before she pays anything. It points her to her CNA certification instead, which faculty have already assessed, so she submits it and the Registrar verifies it. Outcome: no nursing credit, 3 elective credits for her CNA certification, and a student who still trusts the process."]
 };
 const HAIR={
  angela:{back:'<path d="M11.2 23c-.4-8.4 3.4-13 8.8-13s9.2 4.6 8.8 13z"/>',front:'<path d="M12.2 17.5c.3-5 3.4-8 7.8-8s7.5 3 7.8 8c-2.6-.3-5.6-1.8-7.3-4-1.6 2.2-4.8 3.7-8.3 4z"/>'},
