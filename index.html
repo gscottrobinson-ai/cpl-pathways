@@ -1,0 +1,266 @@
+TEST<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NSU CPL Pathways</title>
+<meta name="description" content="Every route a Nevada State University student can take from prior learning to credit on their transcript.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#f5f6f2; --panel:#ffffff; --ink:#1c232b; --muted:#5b6670; --rule:#d9ddd6;
+  --accent:#0d5f63; --accent-soft:#dcebea;
+  --ok:#2f7a3d; --ok-bg:#e3f1e5; --part:#9a6a00; --part-bg:#f7edd2;
+  --plan:#2d5b9a; --plan-bg:#e2eaf6; --none:#a23a2a; --none-bg:#f6e2de;
+  --q:#7b3f8c; --q-bg:#efe3f3; --dim:.22;
+  --display:"Literata",Georgia,serif; --body:"Public Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#14191d; --panel:#1c2328; --ink:#e7ebe8; --muted:#9aa6ad; --rule:#33403f;
+  --accent:#6cc3c2; --accent-soft:#1f3a3b;
+  --ok:#7fcf8c; --ok-bg:#1f3524; --part:#e5bf62; --part-bg:#3a3018; --plan:#8fb4ea; --plan-bg:#1f2c40;
+  --none:#ee8f7e; --none-bg:#3d2420; --q:#d3a3e1; --q-bg:#33233a; --dim:.25; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);padding:28px 16px 56px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+h1,h2{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(28px,4vw,40px)}
+h2{font-size:22px}
+p{margin:0}
+.lede{max-width:68ch;color:var(--muted);margin-top:10px}
+.eyebrow{font:600 11.5px/1 var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+header{display:flex;flex-direction:column;gap:8px}
+.controls{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-top:18px}
+.legend,.personas{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctl-label{font-size:12.5px;color:var(--muted);margin-right:4px}
+.pill{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 var(--body);padding:5px 9px;border-radius:999px;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-ok{color:var(--ok);background:var(--ok-bg)} .s-part{color:var(--part);background:var(--part-bg)}
+.s-plan{color:var(--plan);background:var(--plan-bg)} .s-none{color:var(--none);background:var(--none-bg)}
+button.p-btn{font:600 13px/1 var(--body);padding:8px 13px;border-radius:6px;border:1px solid var(--rule);background:var(--panel);color:var(--ink);cursor:pointer}
+button.p-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+button.p-btn:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.story{max-width:80ch;border-left:3px solid var(--accent);padding:4px 0 4px 14px;color:var(--ink)}
+.story[hidden]{display:none!important}
+.section-head{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.section-head p{color:var(--muted);max-width:72ch}
+.scroll{overflow-x:auto;padding-bottom:6px}
+.flow{display:flex;align-items:stretch;gap:0;min-width:min-content}
+.step{position:relative;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:10px 12px 11px;width:190px;flex:0 0 auto;display:flex;flex-direction:column;gap:6px;transition:opacity .2s}
+.step .t{font-weight:600;font-size:14px;line-height:1.3}
+.step .d{font-size:12.75px;color:var(--muted);line-height:1.4}
+.step .who{font:500 11px/1.2 var(--mono);color:var(--accent);margin-top:auto;padding-top:4px}
+.step.post{border-color:var(--accent);background:var(--accent-soft)}
+.arrow{flex:0 0 26px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.arrow svg{width:18px;height:12px}
+.q{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;padding:0 5px;border-radius:4px;font:600 11px/1 var(--mono);color:var(--q);background:var(--q-bg);text-decoration:none;margin-right:4px}
+.qs{display:flex;flex-wrap:wrap;gap:2px}
+.fork{width:auto;padding:10px 12px;gap:8px}
+.fork .ask{font-weight:600;font-size:13.5px}
+.branch{display:flex;align-items:stretch;gap:0}
+.branch .lab{flex:0 0 34px;font:600 11px/1 var(--mono);color:var(--muted);display:flex;align-items:center}
+.branch .step{width:160px;background:var(--bg)}
+.branch .step.post{background:var(--accent-soft)}
+.tier{display:flex;flex-direction:column;gap:14px}
+.tier + .tier{margin-top:26px}
+.tier-name{font:600 13px/1.3 var(--body);color:var(--muted);border-bottom:1px solid var(--rule);padding-bottom:6px}
+.path{display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:start;padding:14px 0;border-bottom:1px dashed var(--rule)}
+.path:last-child{border-bottom:0}
+.pmeta{display:flex;flex-direction:column;gap:6px;min-width:0}
+.pmeta h3{margin:0;font:700 16px/1.25 var(--display)}
+.pmeta .sub{font-size:12.5px;color:var(--muted)}
+.pmeta .fee{font:500 11.5px/1.3 var(--mono);color:var(--muted)}
+.pnote{grid-column:2;font-size:12.75px;color:var(--muted);max-width:90ch}
+.path > .scroll{min-width:0}
+.guard{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.g{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:11px 13px}
+.g b{display:block;font-size:13.5px;margin-bottom:2px}
+.g span{font-size:12.75px;color:var(--muted)}
+.qlist{display:flex;flex-direction:column;gap:12px;max-width:88ch;padding:0;margin:0;list-style:none}
+.qlist li{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start}
+.qlist b{display:block}
+.qlist span{color:var(--muted);font-size:14px}
+.qlist li:target{background:var(--q-bg);border-radius:6px}
+.sources{font-size:12.5px;color:var(--muted);max-width:90ch;border-top:1px solid var(--rule);padding-top:14px}
+.sources b{color:var(--ink)}
+body.persona .step:not(.on):not(.fork .step){opacity:var(--dim)}
+body.persona .path.off .pmeta{opacity:var(--dim)}
+body.persona .step.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+@media (max-width:760px){
+  .path{grid-template-columns:1fr}
+  .pnote{grid-column:1}
+}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Nevada State University · Credit for Prior Learning</span>
+    <h1>The Garden of Forking Paths, Mapped</h1>
+    <p class="lede">Every route a student can take from prior learning to credit on their transcript, with who handles each step and how much of it exists today. Built from NSU policy (Operations Chapter 35), NSU's CPL planning, and published models from TMCC and CAEL.</p>
+    <div class="controls">
+      <div class="legend" aria-label="Status legend">
+        <span class="ctl-label">Status</span>
+        <span class="pill s-ok">In place</span><span class="pill s-part">Partly in place</span>
+        <span class="pill s-plan">Planned</span><span class="pill s-none">Not built</span>
+        <span class="q" style="margin-left:6px">Q</span><span class="ctl-label">Open question</span>
+      </div>
+      <div class="personas" role="group" aria-label="Follow a student">
+        <span class="ctl-label">Follow a student</span>
+        <button class="p-btn" data-persona="" aria-pressed="true">Everyone</button>
+        <button class="p-btn" data-persona="angela" aria-pressed="false">Angela</button>
+        <button class="p-btn" data-persona="sam" aria-pressed="false">Sam</button>
+      </div>
+    </div>
+    <p class="story" id="story-angela" hidden><b>Angela</b>, 25, veteran, Business major, no prior college. She sends her DD-214 and JST, gets her automatic service credits, and runs her story through an AI CPL review. The Registrar applies JST credit where it moves her degree forward: 6 Core Curriculum, 6 BUS elective, and 6 general elective credits.</p>
+    <p class="story" id="story-sam" hidden><b>Sam</b>, 19, photographer, Visual Media major. An advisor at orientation points him to portfolio credit. A discovery session with Visual Media faculty confirms he's ready, he builds the portfolio in his first semester, and faculty award 6 credits toward his degree.</p>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Stage 1</span>
+      <h2>The front door</h2>
+      <p>Every path starts here. Today most of this depends on a student knowing to ask.</p>
+    </div>
+    <div class="scroll"><div class="flow" id="front"></div></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Stage 2</span>
+      <h2>Six paths to credit</h2>
+      <p>Ordered the way TMCC advises students: fastest and cheapest first, portfolio last. Tier 1 runs through the Registrar with no evaluation fee. Tier 2 needs a faculty judgment.</p>
+    </div>
+    <div id="paths"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Stage 3</span>
+      <h2>Checks before any credit posts</h2>
+      <p>These come from NSU policy and apply to every path.</p>
+    </div>
+    <div class="guard">
+      <div class="g"><b>50% cap</b><span>CPL can't exceed half the minimum credits for the degree.</span></div>
+      <div class="g"><b>Residency</b><span>CPL doesn't count toward the 30 upper-division credits students must earn at NSU.</span></div>
+      <div class="g"><b>No duplicates</b><span>No credit for learning already credited by a course or another CPL award.</span></div>
+      <div class="g"><b>GPA and enrollment</b><span>CPL doesn't affect GPA, semester enrollment, or financial aid calculations.</span></div>
+      <div class="g"><b>SAP check</b><span>Apply credit where it advances the degree. Blanket general electives can create SAP risk in tight programs like Nursing.</span></div>
+      <div class="g"><b>Appeals</b><span>Students appeal an evaluation to the dean over that subject area.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Unresolved</span>
+      <h2>Open questions</h2>
+      <p>Each one is tagged on the steps it affects.</p>
+    </div>
+    <ol class="qlist" id="qlist"></ol>
+  </section>
+
+  <p class="sources"><b>Sources:</b> NSU Operations Chapter 35 (March 25, 2026) · TMCC Credit by Portfolio Workflow · CAEL PLA/CPL Process Map. Fee figures for Memphis and TMCC describe those schools, not NSU decisions.</p>
+</div>
+
+<script>
+const Q = {
+  1:["Who owns intake and coaching?","A dedicated CPL coordinator would handle intake, coaching, and routing. NSU hasn't settled who fills that role."],
+  2:["Do admitted students get an estimate before they enroll?","Policy-wise, CPL goes to enrolled students. A preview could persuade admitted students to enroll."],
+  3:["Which courses are eligible?","BUS 101 for a former bank employee makes sense. A Nursing drug dosing course may not. Departments could mark each course as eligible, eligible by certain methods only, or not eligible."],
+  4:["What does a faculty evaluation cost, and what if the answer is no?","NSU hasn't set a fee. CAEL's standard is that students pay for the assessment, not the credit. Memphis charges a $75 deposit and pays faculty $250 per evaluation."],
+  5:["What if a student needs evaluators from more than one area?","Memphis routes multi-field portfolios to more than one evaluator. Someone has to coordinate that."],
+  6:["DD-214 credit: 4 or 3?","Operations Chapter 35 says up to 4 lower-division general elective credits. The catalog says 3."],
+  7:["Can students decline elective credit?","A veteran like Angela may want to turn down credit to protect GI Bill benefits. VA rules on prior credit need a check with Veteran Services."]
+};
+const ARROW='<div class="arrow" aria-hidden="true"><svg viewBox="0 0 18 12"><path d="M0 6h15M10 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>';
+function qs(list){return list&&list.length?'<div class="qs">'+list.map(n=>`<a class="q" href="#q${n}" title="${Q[n][0]}">Q${n}</a>`).join('')+'</div>':''}
+function step(s){
+  if(s.fork){
+    const br=(lab,arr)=>`<div class="branch"><span class="lab">${lab}</span>${arr.map(step).join(ARROW)}</div>`;
+    return `<div class="step fork"${s.p?` data-p="${s.p.join(' ')}"`:''}><span class="ask">${s.ask}</span>${br(s.yesLabel||'Yes',s.yes)}${br(s.noLabel||'No',s.no)}</div>`;
+  }
+  return `<div class="step${s.post?' post':''}"${s.p?` data-p="${s.p.join(' ')}"`:''}><span class="t">${s.t}</span>${s.d?`<span class="d">${s.d}</span>`:''}${qs(s.q)}<span class="who">${s.who}</span></div>`;
+}
+const flow=arr=>arr.map(step).join(ARROW);
+
+const front=[
+  {t:"Student has prior learning",d:"Military service, job training, certifications, exam scores, creative work.",who:"Student",p:["angela","sam"]},
+  {t:"Hears about CPL",d:"Admissions, an orientation advisor, the STAR veterans group, or the website.",who:"Advising · STAR · Admissions",q:[1],p:["angela","sam"]},
+  {t:"Gets an estimate (admitted)",d:"A basic AI CPL checker gives a rough sense of possible credit.",who:"AI CPL tool",q:[2],p:["angela"]},
+  {t:"Full review (enrolled)",d:"Student uploads JST, certificates, and work history and gets a report.",who:"Student · AI CPL tool",p:["angela"]},
+  {t:"Triage to a path",d:"Someone reads the report and routes each item to the right path below, fastest first.",who:"Advisor or CPL coordinator",q:[1,3],p:["angela","sam"]}
+];
+
+const paths=[
+ {tier:1,id:"A",name:"Standardized exams",sub:"AP, CLEP, DSST, IB",status:["s-ok","In place"],fee:"No evaluation fee",
+  steps:[{t:"Sends official scores",d:"Ideally with the admission application.",who:"Student"},
+         {t:"Matches score to catalog table",d:"Minimum scores and equivalencies are published in the catalog.",who:"Registrar"},
+         {t:"Credit posts",who:"Registrar",post:true}],
+  note:"NSHE campuses still award different credit for the same AP, CLEP, and IB scores. A system English alignment group is working through it."},
+ {tier:1,id:"B",name:"Military service credit",sub:"DD-214, 12+ months active duty, honorable discharge",status:["s-part","In place, under-used"],fee:"No evaluation fee",
+  steps:[{t:"Submits DD-214",d:"To Admissions with the application.",who:"Student → Admissions",p:["angela"]},
+         {t:"Confirms eligibility",d:"12 months active duty and honorable discharge.",who:"Admissions",p:["angela"]},
+         {t:"Elective credits post",d:"Lower-division general elective credit.",who:"Registrar",q:[6,7],post:true,p:["angela"]}],
+  note:"Many eligible veterans haven't claimed this credit. NSU is working on a way to find and contact them."},
+ {tier:1,id:"C",name:"Military transcripts",sub:"JST, CCAF, Air University",status:["s-part","Partly in place"],fee:"No evaluation fee",
+  steps:[{t:"Submits JST",d:"CCAF and Air University transcripts go through regular transcript evaluation.",who:"Student",p:["angela"]},
+         {fork:true,ask:"Is the course already on the M-CPL Crosswalk?",p:["angela"],
+          yes:[{t:"Credit posts as listed",who:"Transfer evaluator",post:true}],
+          no:[{t:"JST Faculty Review Request",d:"Sent to the chair or dean.",who:"Transfer evaluator"},
+              {t:"Course lead compares outcomes",d:"80% match standard, one week.",who:"Faculty"},
+              {t:"Chair or dean approves",d:"Then it goes on the crosswalk for future students.",who:"Chair · Dean",post:true}]},
+         {t:"Applies credit where it helps",d:"Core, major, then general elective, checked against SAP.",who:"Registrar",q:[7],p:["angela"]}],
+  note:"NSU is still documenting the exact JST workflow, including CCAF. A shared NSHE military crosswalk would let campuses reuse each other's approvals."},
+ {tier:2,id:"D",name:"Credit by internal exam",sub:"Faculty-written comprehensive exam",status:["s-ok","In place, faculty optional"],fee:"Fee required, one attempt",
+  steps:[{t:"Requests an exam",d:"By email to the Registrar.",who:"Student"},
+         {t:"Routes to chair or dean",who:"Registrar"},
+         {t:"Faculty agree and set a passing score",d:"Faculty aren't required to offer one.",who:"Faculty",q:[3]},
+         {t:"Takes the exam",d:"Pays the fee, no retakes.",who:"Student"},
+         {t:"Credit posts",who:"Registrar",post:true}],
+  note:"NSU's CPL plan includes AI-assisted credit by exam."},
+ {tier:2,id:"E",name:"Certifications and non-credit training",sub:"POST, leadership certificate, Human Health Sciences, workforce credentials",status:["s-plan","Planned"],fee:"No fee once on the crosswalk",
+  steps:[{t:"Faculty evaluate a credential once",d:"Using a rubric like the Memphis certificate rubric.",who:"Faculty"},
+         {t:"Map it to NSU courses",d:"Example: POST's 15 credits to five Criminal Justice courses.",who:"Faculty · Chair"},
+         {t:"Add it to the crosswalk",who:"Registrar"},
+         {t:"Credit posts for every holder",d:"Works like the JST crosswalk from then on.",who:"Registrar",post:true}],
+  note:"NSU is exploring POST credit and an online, CPL-friendly Criminal Justice pathway."},
+ {tier:2,id:"F",name:"Credit by portfolio",sub:"Visual Media pilot first, then other programs",status:["s-none","Not built"],fee:"Fee and amount undecided",
+  steps:[{t:"Discovery session",d:"Faculty explain which courses fit and whether the student is ready.",who:"Faculty",q:[3],p:["sam"]},
+         {t:"Letter of intent and deposit",d:"Memphis uses a $75 deposit to signal serious intent.",who:"Student",q:[4],p:["sam"]},
+         {t:"Portfolio course",d:"Four modules ending in Kolb-based learning narratives, with a coach reviewing the first narrative.",who:"CPL coordinator",q:[1],p:["sam"]},
+         {t:"Submits portfolio",who:"Student",p:["sam"]},
+         {t:"Faculty evaluate",d:"Memphis pays $250 per evaluation. TMCC pays $100. An AI tool could draft the first pass.",who:"Faculty",q:[4,5],p:["sam"]},
+         {fork:true,ask:"Does the portfolio meet the outcomes?",p:["sam"],
+          yes:[{t:"Dean approves, course credit posts",who:"Dean · Registrar",post:true}],
+          no:[{t:"Faculty explain why",d:"Student can revise and resubmit, or appeal to the dean.",who:"Faculty · Dean"}]}],
+  note:"This path depends on staff who can coach students and coordinate portfolio review."}
+];
+
+document.getElementById('front').innerHTML=flow(front);
+let html='';
+[1,2].forEach(t=>{
+  html+=`<div class="tier"><div class="tier-name">${t===1?'Tier 1 · Registrar decides, no evaluation fee':'Tier 2 · Faculty judgment required'}</div>`;
+  paths.filter(p=>p.tier===t).forEach(p=>{
+    const who=new Set();p.steps.forEach(s=>(s.p||[]).forEach(x=>who.add(x)));
+    html+=`<div class="path" data-who="${[...who].join(' ')}"><div class="pmeta"><h3>${p.id}. ${p.name}</h3><span class="sub">${p.sub}</span><span class="pill ${p.status[0]}" style="align-self:flex-start">${p.status[1]}</span><span class="fee">${p.fee}</span></div><div class="scroll"><div class="flow">${flow(p.steps)}</div></div><p class="pnote">${p.note}</p></div>`;
+  });
+  html+='</div>';
+});
+document.getElementById('paths').innerHTML=html;
+document.getElementById('qlist').innerHTML=Object.entries(Q).map(([n,[h,b]])=>`<li id="q${n}"><span class="q">Q${n}</span><div><b>${h}</b><span>${b}</span></div></li>`).join('');
+
+function setPersona(p){
+  document.body.classList.toggle('persona',!!p);
+  document.querySelectorAll('.p-btn').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.persona===p)));
+  document.querySelectorAll('.step').forEach(el=>el.classList.remove('on'));
+  if(p) document.querySelectorAll('.step[data-p]').forEach(el=>{if(el.dataset.p.split(' ').includes(p)){el.classList.add('on');el.querySelectorAll('.step').forEach(c=>c.classList.add('on'));}});
+  document.querySelectorAll('.path').forEach(el=>el.classList.toggle('off',!!p&&!el.dataset.who.split(' ').includes(p)));
+  ['angela','sam'].forEach(x=>document.getElementById('story-'+x).hidden=(x!==p));
+}
+document.querySelectorAll('.p-btn').forEach(b=>b.addEventListener('click',()=>setPersona(b.dataset.persona)));
+</script>
+</body>
+</html>
