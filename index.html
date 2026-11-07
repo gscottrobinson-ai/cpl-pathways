@@ -43,6 +43,12 @@ button.p-btn{font:600 13px/1 var(--body);padding:8px 13px;border-radius:6px;bord
 button.p-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
 button.p-btn:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .story{max-width:80ch;border-left:3px solid var(--accent);padding:4px 0 4px 14px;color:var(--ink)}
+.av{display:inline-flex;width:28px;height:28px;border-radius:50%;overflow:hidden;background:var(--accent-soft);color:var(--accent);flex:0 0 auto}
+.av svg{width:100%;height:100%;display:block}
+button.p-btn{display:inline-flex;align-items:center;gap:7px;padding:5px 12px 5px 5px}
+button.p-btn[aria-pressed="true"] .av{background:var(--bg);color:var(--accent)}
+.story{display:flex;gap:12px;align-items:flex-start}
+.story .av{width:56px;height:56px}
 .story[hidden]{display:none!important}
 .section-head{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .section-head p{color:var(--muted);max-width:72ch}
@@ -86,7 +92,7 @@ button.p-btn:focus-visible,a:focus-visible{outline:2px solid var(--accent);outli
 .sources{font-size:12.5px;color:var(--muted);max-width:90ch;border-top:1px solid var(--rule);padding-top:14px}
 .sources b{color:var(--ink)}
 body.persona .step:not(.on):not(.fork .step){opacity:var(--dim)}
-body.persona .path.off .pmeta{opacity:var(--dim)}
+body.persona .path.off{display:none}
 body.persona .step.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
 @media (max-width:760px){
   .path{grid-template-columns:1fr}
@@ -110,13 +116,10 @@ body.persona .step.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--acce
       </div>
       <div class="personas" role="group" aria-label="Follow a student">
         <span class="ctl-label">Follow a student</span>
-        <button class="p-btn" data-persona="" aria-pressed="true">Everyone</button>
-        <button class="p-btn" data-persona="angela" aria-pressed="false">Angela</button>
-        <button class="p-btn" data-persona="sam" aria-pressed="false">Sam</button>
+        <span id="pbtns" style="display:contents"></span>
       </div>
     </div>
-    <p class="story" id="story-angela" hidden><b>Angela</b>, 25, veteran, Business major, no prior college. She sends her DD-214 and JST, gets her automatic service credits, and runs her story through an AI CPL review. The Registrar applies JST credit where it moves her degree forward: 6 Core Curriculum, 6 BUS elective, and 6 general elective credits.</p>
-    <p class="story" id="story-sam" hidden><b>Sam</b>, 19, photographer, Visual Media major. An advisor at orientation points him to portfolio credit. A discovery session with Visual Media faculty confirms he's ready, he builds the portfolio in his first semester, and faculty award 6 credits toward his degree.</p>
+    <p class="story" id="story" hidden></p>
   </header>
 
   <section>
@@ -173,7 +176,9 @@ const Q = {
   4:["What does a faculty evaluation cost, and what if the answer is no?","NSU hasn't set a fee. CAEL's standard is that students pay for the assessment, not the credit. Memphis charges a $75 deposit and pays faculty $250 per evaluation."],
   5:["What if a student needs evaluators from more than one area?","Memphis routes multi-field portfolios to more than one evaluator. Someone has to coordinate that."],
   6:["DD-214 credit: 4 or 3?","Operations Chapter 35 says up to 4 lower-division general elective credits. The catalog says 3."],
-  7:["Can students decline elective credit?","A veteran like Angela may want to turn down credit to protect GI Bill benefits. VA rules on prior credit need a check with Veteran Services."]
+  7:["Can students decline elective credit?","A veteran like Angela may want to turn down credit to protect GI Bill benefits. VA rules on prior credit need a check with Veteran Services."],
+  8:["Do expired credentials count?","Dana's CompTIA A+ expired three years ago. The checker has to give her an answer, and we don't have one yet."],
+  9:["Who keeps the approved lists current?","Someone has to renew certification approvals and sign agreements with non-credit providers, and decide what happens with a program nobody has reviewed yet."]
 };
 const ARROW='<div class="arrow" aria-hidden="true"><svg viewBox="0 0 18 12"><path d="M0 6h15M10 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>';
 function qs(list){return list&&list.length?'<div class="qs">'+list.map(n=>`<a class="q" href="#q${n}" title="${Q[n][0]}">Q${n}</a>`).join('')+'</div>':''}
@@ -186,12 +191,13 @@ function step(s){
 }
 const flow=arr=>arr.map(step).join(ARROW);
 
+const ALL=["angela","sam","marcus","dana","luis","priya"];
 const front=[
-  {t:"Student has prior learning",d:"Military service, job training, certifications, exam scores, creative work.",who:"Student",p:["angela","sam"]},
-  {t:"Hears about CPL",d:"Admissions, an orientation advisor, the STAR veterans group, or the website.",who:"Advising · STAR · Admissions",q:[1],p:["angela","sam"]},
-  {t:"Gets an estimate (admitted)",d:"A basic AI CPL checker gives a rough sense of possible credit.",who:"AI CPL tool",q:[2],p:["angela"]},
-  {t:"Full review (enrolled)",d:"Student uploads JST, certificates, and work history and gets a report.",who:"Student · AI CPL tool",p:["angela"]},
-  {t:"Triage to a path",d:"Someone reads the report and routes each item to the right path below, fastest first.",who:"Advisor or CPL coordinator",q:[1,3],p:["angela","sam"]}
+  {t:"Student has prior learning",d:"Military service, police academy, job training, certifications, non-credit programs, creative work.",who:"Student",p:ALL},
+  {t:"Hears about CPL",d:"Admissions, an orientation advisor, the STAR veterans group, a friend, or the website.",who:"Advising · STAR · Admissions",q:[1],p:ALL},
+  {t:"Gets an estimate (admitted)",d:"A basic AI CPL checker flags likely credit and warns about courses that aren't eligible.",who:"AI CPL tool",q:[2,3],p:["angela","marcus","dana","priya"]},
+  {t:"Full review (enrolled)",d:"Student uploads JST, certificates, and work history and gets a report.",who:"Student · AI CPL tool",p:["angela","marcus","dana"]},
+  {t:"Triage to a path",d:"Someone reads the report or intake form and routes each item to the right path below, fastest first.",who:"Advisor or CPL coordinator",q:[1,3],p:["angela","sam","marcus","luis","priya"]}
 ];
 
 const paths=[
@@ -221,19 +227,21 @@ const paths=[
          {t:"Takes the exam",d:"Pays the fee, no retakes.",who:"Student"},
          {t:"Credit posts",who:"Registrar",post:true}],
   note:"NSU's CPL plan includes AI-assisted credit by exam."},
- {tier:2,id:"E",name:"Certifications and non-credit training",sub:"POST, leadership certificate, Human Health Sciences, workforce credentials",status:["s-plan","Planned"],fee:"No fee once on the crosswalk",
-  steps:[{t:"Faculty evaluate a credential once",d:"Using a rubric like the Memphis certificate rubric.",who:"Faculty"},
-         {t:"Map it to NSU courses",d:"Example: POST's 15 credits to five Criminal Justice courses.",who:"Faculty · Chair"},
-         {t:"Add it to the crosswalk",who:"Registrar"},
-         {t:"Credit posts for every holder",d:"Works like the JST crosswalk from then on.",who:"Registrar",post:true}],
-  note:"NSU is exploring POST credit and an online, CPL-friendly Criminal Justice pathway."},
+ {tier:2,id:"E",name:"Certifications and non-credit training",sub:"POST, CompTIA and other industry credentials, workforce and continuing education programs",status:["s-plan","Planned"],fee:"No fee once pre-assessed",
+  steps:[{t:"Faculty evaluate a credential once",d:"Using a rubric like the Memphis certificate rubric, or a review of the program's syllabus, hours, and assessments.",who:"Faculty",p:["marcus","dana","luis"]},
+         {t:"Map it to NSU courses",d:"Example: POST academy training to Criminal Justice courses.",who:"Faculty · Chair",p:["marcus","dana","luis"]},
+         {t:"Add it to the approved list",d:"The crosswalk of pre-assessed credentials and non-credit programs.",who:"Registrar",q:[9],p:["marcus","dana","luis"]},
+         {t:"Student submits the credential",d:"Certificate, license, or completion record.",who:"Student",p:["marcus","dana","luis"]},
+         {t:"Registrar verifies it",d:"Confirms the credential is real and current. No faculty meeting needed.",who:"Registrar",q:[8],p:["marcus","dana","luis"]},
+         {t:"Credit posts",who:"Registrar",post:true,p:["marcus","dana","luis"]}],
+  note:"Faculty decide once, and the Registrar verifies after that. NSU is exploring POST credit and an online, CPL-friendly Criminal Justice pathway."},
  {tier:2,id:"F",name:"Credit by portfolio",sub:"Visual Media pilot first, then other programs",status:["s-none","Not built"],fee:"Fee and amount undecided",
   steps:[{t:"Discovery session",d:"Faculty explain which courses fit and whether the student is ready.",who:"Faculty",q:[3],p:["sam"]},
          {t:"Letter of intent and deposit",d:"Memphis uses a $75 deposit to signal serious intent.",who:"Student",q:[4],p:["sam"]},
-         {t:"Portfolio course",d:"Four modules ending in Kolb-based learning narratives, with a coach reviewing the first narrative.",who:"CPL coordinator",q:[1],p:["sam"]},
-         {t:"Submits portfolio",who:"Student",p:["sam"]},
-         {t:"Faculty evaluate",d:"Memphis pays $250 per evaluation. TMCC pays $100. An AI tool could draft the first pass.",who:"Faculty",q:[4,5],p:["sam"]},
-         {fork:true,ask:"Does the portfolio meet the outcomes?",p:["sam"],
+         {t:"Portfolio course",d:"Four modules ending in Kolb-based learning narratives, with a coach reviewing the first narrative.",who:"CPL coordinator",q:[1],p:["sam","marcus"]},
+         {t:"Submits portfolio",who:"Student",p:["sam","marcus"]},
+         {t:"Faculty evaluate",d:"Memphis pays $250 per evaluation. TMCC pays $100. An AI tool could draft the first pass.",who:"Faculty",q:[4,5],p:["sam","marcus"]},
+         {fork:true,ask:"Does the portfolio meet the outcomes?",p:["sam","marcus"],
           yes:[{t:"Dean approves, course credit posts",who:"Dean · Registrar",post:true}],
           no:[{t:"Faculty explain why",d:"Student can revise and resubmit, or appeal to the dean.",who:"Faculty · Dean"}]}],
   note:"This path depends on staff who can coach students and coordinate portfolio review."}
@@ -252,13 +260,52 @@ let html='';
 document.getElementById('paths').innerHTML=html;
 document.getElementById('qlist').innerHTML=Object.entries(Q).map(([n,[h,b]])=>`<li id="q${n}"><span class="q">Q${n}</span><div><b>${h}</b><span>${b}</span></div></li>`).join('');
 
+const PERSONAS={
+ angela:["Angela","<b>Angela</b>, 25, veteran, Business major, no prior college. She sends her DD-214 and JST, gets her automatic service credits, and runs her story through the AI CPL checker. The Registrar applies JST credit where it moves her degree forward. Outcome: 6 Core Curriculum, 6 BUS elective, and 6 general elective credits."],
+ sam:["Sam","<b>Sam</b>, 19, photographer, Visual Media major. An advisor at orientation points him to portfolio credit. A discovery session with Visual Media faculty confirms he's ready, and he builds the portfolio in his first semester. Outcome: 6 credits toward his degree."],
+ marcus:["Marcus","<b>Marcus</b>, 34, patrol officer, part-time Criminal Justice student on rotating shifts. Faculty already reviewed the POST academy, so he uploads his certificate and the Registrar verifies it. Nobody has pre-assessed his FTO and supervisor training, so he builds a portfolio on his own schedule and a CJ faculty member reviews it online. Outcome: 9 CJ credits for POST and 3 for the portfolio."],
+ dana:["Dana","<b>Dana</b>, 41, twelve years in help desk and network support, Engineering Technology BAS. The AI CPL checker matches her Network+ and Security+ to courses faculty already approved, the Registrar confirms both are current, and she never meets with faculty. Her expired A+ waits on a policy decision. Outcome: 9 credits toward her major."],
+ luis:["Luis","<b>Luis</b>, 28, medical office front desk, Allied Health BAS. He finished a non-credit Medical Billing and Coding certificate and assumed it didn't count. His advisor spots it on his intake form, faculty already approved that program for one course, and the credit posts. Outcome: 3 credits he'd written off."],
+ priya:["Priya","<b>Priya</b>, 30, certified nursing assistant for six years, Nursing major. She wants credit for a fundamentals nursing course. The checker knows that course is on the ineligible list and tells her before she pays anything, then shows her what she can earn. Outcome: no nursing credit, 3 elective credits, and a student who still trusts the process."]
+};
+const HAIR={
+ angela:{back:'<path d="M11.2 23c-.4-8.4 3.4-13 8.8-13s9.2 4.6 8.8 13z"/>',front:'<path d="M12.2 17.5c.3-5 3.4-8 7.8-8s7.5 3 7.8 8c-2.6-.3-5.6-1.8-7.3-4-1.6 2.2-4.8 3.7-8.3 4z"/>'},
+ sam:{front:'<path d="M12.1 17c-.6-5.4 3-9 7.9-9 2.7 0 4.3.8 5.5 2 2 .2 3 2.4 2.4 6.6-1.5-1.9-3.5-3.1-6.1-3.4-2.9 1.6-6.3 2.9-9.7 3.8z"/>'},
+ marcus:{front:'<path d="M12.3 16.5c-.2-1.6.2-3 .9-4h13.6c.7 1 1.1 2.4.9 4z"/><path d="M11 14.2c0-4.4 4-7 9-7s9 2.6 9 7z"/><path d="M10.5 14.2h19" stroke-width="2.2"/><circle cx="20" cy="11" r="1.6" fill="var(--panel)"/>'},
+ dana:{back:'<path d="M10.8 27c-.6-11 3.2-17 9.2-17s9.8 6 9.2 17z"/>',front:'<path d="M12 18c.2-5.4 3.4-8.6 8-8.6s7.8 3.2 8 8.6c-1.6-.4-4.6-2.4-5.6-4.6-1.6 2.2-6 4.2-10.4 4.6z"/>'},
+ luis:{front:'<path d="M12.2 16.8c-.4-5.2 3.2-8.6 7.8-8.6 4.4 0 7.9 3.2 7.6 8.4-2.9-.4-6.4-1.8-8.4-3.9-1.7 2-4.4 3.4-7 4.1z"/>'},
+ priya:{back:'<circle cx="20" cy="8.2" r="3.6"/>',front:'<path d="M12.2 17.2c0-5.4 3.3-8.2 7.8-8.2s7.8 2.8 7.8 8.2c-3-.9-6-2.6-7.8-4.8-1.8 2.2-4.8 3.9-7.8 4.8z"/>'}
+};
+const EXTRA={
+ angela:'<path d="M26 33.2l.9 1.8 2 .2-1.5 1.3.5 2-1.9-1.1-1.9 1.1.5-2-1.5-1.3 2-.2z" fill="currentColor" stroke="none"/>',
+ sam:'<path d="M16 29l1.5 4M24 29l-1.5 4"/><rect x="15.5" y="32.5" width="9" height="6.5" rx="1.2" fill="var(--panel)"/><circle cx="20" cy="35.8" r="1.9"/>',
+ marcus:'<path d="M14.5 33.5l2 2 3-3" stroke-width="1.4"/>',
+ dana:'<path d="M11 18.5a9 9 0 0 1 18 0"/><rect x="9.6" y="17" width="3" height="5" rx="1.3" fill="var(--panel)"/><rect x="27.4" y="17" width="3" height="5" rx="1.3" fill="var(--panel)"/><path d="M11 22q.5 4 5.5 4.3"/>',
+ luis:'<path d="M17 29l3 5 3-5"/><rect x="17.6" y="34" width="4.8" height="5.5" rx=".8" fill="var(--panel)"/>',
+ priya:'<path d="M15.5 29v3.2a4.5 4.5 0 0 0 9 0V29"/><circle cx="24.5" cy="36.3" r="1.5" fill="var(--panel)"/><path d="M24.5 32.2v2.6"/>'
+};
+function person(k,dx=0,sc=1){
+  const h=HAIR[k]||{};
+  return `<g transform="translate(${dx} 0) scale(${sc})" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+   <g fill="currentColor" stroke="none">${h.back||''}</g>
+   <path d="M7 41c0-7.4 5.6-11.6 13-11.6S33 33.6 33 41z" fill="currentColor" fill-opacity=".2"/>
+   <path d="M17.6 25v4.4M22.4 25v4.4"/>
+   <circle cx="20" cy="18.5" r="7.8" fill="var(--panel)"/>
+   <g fill="currentColor" stroke="none">${h.front||''}</g>
+   <circle cx="17.2" cy="19.2" r=".95" fill="currentColor" stroke="none"/><circle cx="22.8" cy="19.2" r=".95" fill="currentColor" stroke="none"/>
+   <path d="M17.6 22.2q2.4 1.9 4.8 0" fill="none"/>
+   <g fill="none">${EXTRA[k]||''}</g></g>`;
+}
+const av=k=>`<span class="av" aria-hidden="true"><svg viewBox="5 3.5 30 33">${k==='all'?person('luis',-7,1)+person('angela',7,1):person(k)}</svg></span>`;
+document.getElementById('pbtns').innerHTML='<button class="p-btn" data-persona="" aria-pressed="true">'+av('all')+'Everyone</button>'+Object.entries(PERSONAS).map(([k,v])=>`<button class="p-btn" id="p-${k}" data-persona="${k}" aria-pressed="false">${av(k)}${v[0]}</button>`).join('');
 function setPersona(p){
   document.body.classList.toggle('persona',!!p);
   document.querySelectorAll('.p-btn').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.persona===p)));
   document.querySelectorAll('.step').forEach(el=>el.classList.remove('on'));
   if(p) document.querySelectorAll('.step[data-p]').forEach(el=>{if(el.dataset.p.split(' ').includes(p)){el.classList.add('on');el.querySelectorAll('.step').forEach(c=>c.classList.add('on'));}});
   document.querySelectorAll('.path').forEach(el=>el.classList.toggle('off',!!p&&!el.dataset.who.split(' ').includes(p)));
-  ['angela','sam'].forEach(x=>document.getElementById('story-'+x).hidden=(x!==p));
+  document.querySelectorAll('.tier').forEach(t=>t.hidden=!t.querySelector('.path:not(.off)'));
+  const st=document.getElementById('story'); st.hidden=!p; st.innerHTML=p?av(p)+'<span>'+PERSONAS[p][1]+'</span>':'';
 }
 document.querySelectorAll('.p-btn').forEach(b=>b.addEventListener('click',()=>setPersona(b.dataset.persona)));
 </script>
